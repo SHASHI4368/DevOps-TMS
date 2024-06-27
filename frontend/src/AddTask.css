@@ -1,0 +1,90 @@
+/* TaskFormPopup.css */
+.task-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.task-popup-content {
+  background: #fff;
+  width: 500px;
+  padding: 30px;
+  border-radius: 10px; /* Increase border radius for a rounded appearance */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative; /* Add relative positioning for the close button */
+}
+
+/* Added styles for label and input alignment */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 18px;
+  text-align: left; 
+  margin-left: 30px;/* Increase label font size */
+}
+
+.form-group input,
+.form-group textarea {
+  font-size: 16px; /* Increase input and textarea font size */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-button {
+  background: #071A47;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-button:hover {
+  background: #0056b3;
+}
+
+/* Styles for the close button */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 24px;
+  color: red; /* Make the close button red */
+  background: none;
+  border: none;
+  padding: 0;
+  transition: color 0.3s;
+}
+
+.close-btn:hover {
+  color: #9aa7c9;
+}
+
+.close-popup-button {
+  background: red; /* Close button background color */
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.close-popup-button:hover {
+  background: #ff0000; /* Hover background color */
+}

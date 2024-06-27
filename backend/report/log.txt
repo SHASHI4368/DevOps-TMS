@@ -1,0 +1,133 @@
+Started by user Shashika Gurunayake
+Obtained Jenkinsfile from git https://github.com/SHASHI4368/4368-Gurunayake.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in C:\ProgramData\Jenkins\.jenkins\workspace\app-backend
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git.exe rev-parse --resolve-git-dir C:\ProgramData\Jenkins\.jenkins\workspace\app-backend\.git # timeout=10
+Fetching changes from the remote Git repository
+ > git.exe config remote.origin.url https://github.com/SHASHI4368/4368-Gurunayake.git # timeout=10
+Fetching upstream changes from https://github.com/SHASHI4368/4368-Gurunayake.git
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.43.0.windows.1'
+ > git.exe fetch --tags --force --progress -- https://github.com/SHASHI4368/4368-Gurunayake.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe rev-parse "refs/remotes/origin/master^{commit}" # timeout=10
+Checking out Revision 0789463eda066295eac3c18a73c47baa56dbccf8 (refs/remotes/origin/master)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f 0789463eda066295eac3c18a73c47baa56dbccf8 # timeout=10
+Commit message: "Jenkins updated"
+ > git.exe rev-list --no-walk 0789463eda066295eac3c18a73c47baa56dbccf8 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout)
+[Pipeline] git
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git.exe rev-parse --resolve-git-dir C:\ProgramData\Jenkins\.jenkins\workspace\app-backend\.git # timeout=10
+Fetching changes from the remote Git repository
+ > git.exe config remote.origin.url https://github.com/SHASHI4368/4368-Gurunayake.git # timeout=10
+Fetching upstream changes from https://github.com/SHASHI4368/4368-Gurunayake.git
+ > git.exe --version # timeout=10
+ > git --version # 'git version 2.43.0.windows.1'
+ > git.exe fetch --tags --force --progress -- https://github.com/SHASHI4368/4368-Gurunayake.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git.exe rev-parse "refs/remotes/origin/master^{commit}" # timeout=10
+Checking out Revision 0789463eda066295eac3c18a73c47baa56dbccf8 (refs/remotes/origin/master)
+ > git.exe config core.sparsecheckout # timeout=10
+ > git.exe checkout -f 0789463eda066295eac3c18a73c47baa56dbccf8 # timeout=10
+ > git.exe branch -a -v --no-abbrev # timeout=10
+ > git.exe branch -D master # timeout=10
+ > git.exe checkout -b master 0789463eda066295eac3c18a73c47baa56dbccf8 # timeout=10
+Commit message: "Jenkins updated"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker Image)
+[Pipeline] bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\app-backend>docker build -t app-backend . 
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 306B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:20-alpine
+#2 DONE 1.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [ 1/10] FROM docker.io/library/node:20-alpine@sha256:ec0c413b1d84f3f7f67ec986ba885930c57b5318d2eb3abc6960ee05d4f2eb28
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 362B done
+#5 DONE 0.0s
+
+#6 [ 5/10] COPY config /app/config/
+#6 CACHED
+
+#7 [ 9/10] WORKDIR /app
+#7 CACHED
+
+#8 [ 6/10] COPY controllers /app/controllers/
+#8 CACHED
+
+#9 [ 7/10] COPY models /app/models/
+#9 CACHED
+
+#10 [ 8/10] COPY routes /app/routes/
+#10 CACHED
+
+#11 [ 3/10] COPY package.json /app/
+#11 CACHED
+
+#12 [ 2/10] COPY .env /app/
+#12 CACHED
+
+#13 [ 4/10] COPY server.js /app/
+#13 CACHED
+
+#14 [10/10] RUN npm install
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 writing image sha256:6d6d8ef6827ffb815697cdaa9bc794efcefc4e4eb3574e1051cd91ba86aaced7 done
+#15 naming to docker.io/library/app-backend done
+#15 DONE 0.0s
+
+What's Next?
+  1. Sign in to your Docker account → docker login
+  2. View a summary of image vulnerabilities and recommendations → docker scout quickview
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run Docker Image)
+[Pipeline] bat
+
+C:\ProgramData\Jenkins\.jenkins\workspace\app-backend>docker run -d -p 5000:5000 app-backend 
+651cc322e2d5106e980ce0307bc8513539e686a1b280278c2d8fa14714351d8b
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS

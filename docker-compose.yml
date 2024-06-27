@@ -1,0 +1,13 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '5000:5000'
+    environment:
+      - MONGO_URI = mongodb+srv://shashikagurunayake6453:KRzDgixQRtVFIdYg@myprojects.oqnzweq.mongodb.net/
+
+  frontend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
