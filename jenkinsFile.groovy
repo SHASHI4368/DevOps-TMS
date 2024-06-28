@@ -1,80 +1,93 @@
 pipeline {
     agent any
-
-    triggers {
-        githubPush()
-    }
-
+triggers{
+    githubPush()
+  }
     environment {
-        REPO_URL = 'https://github.com/SHASHI4368/DevOps-TMS.git'
-        BRANCH = 'master'
-        APP_NAME = 'DevOps-TMS'
-        DEPLOY_SERVER = '16.171.194.50'
-        DEPLOY_USER = 'ubuntu'
+        REPO_URL = 'https://github.com/iRajapaksha/BookMyShoot.git'
+        BRANCH = 'main'
+        DOCKER_REGISTRY = 'irajapaksha'
+        APP_NAME = 'BookMyShoot'
+        EC2_USER = 'ubuntu'
+        EC2_HOST = '172.31.45.108'
+
     }
 
     stages {
-        stage('SSH into Server and Clone Repo') {
+        stage('Clone Repository') {
+            steps {
+                git branch: "${BRANCH}", url: "${REPO_URL}"
+            }
+        }
+        stage('Install Dependencies'){
+            steps{
+                echo 'Installing Dependencies...'
+
+            }
+        }
+
+        stage('Build Docker Images') {
             steps {
                 script {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-                        if [ ! -d "${APP_NAME}" ]; then
-                            git clone -b ${BRANCH} ${REPO_URL} ${APP_NAME};
-                        else
-                            cd ${APP_NAME} && git pull origin ${BRANCH};
-                        fi
-                    '
-                    """
+                    sh 'docker-compose build'
                 }
             }
         }
 
-        // stage('Install Dependencies') {
-        //     steps {
-        //         echo 'Installing Dependencies...'
-        //         // Add any additional steps if required
-        //     }
-        // }
+        stage('Push Docker Images') {
+            steps {
+                script {
+                    sh '''
+                    docker-compose push
+                    '''
+                }
+            }
+        }
 
-        // stage('Build Docker Images') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-        //                 cd ${APP_NAME} &&
-        //                 docker-compose build
-        //             '
-        //             """
-        //         }
-        //     }
-        // }
-
-        // stage('Push Docker Images') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-        //                 cd ${APP_NAME} &&
-        //                 docker-compose push
-        //             '
-        //             """
-        //         }
-        //     }
-        // }
-
-        // stage('Deploy Application') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-        //                 cd ${APP_NAME} &&
-        //                 docker-compose down &&
-        //                 docker-compose up -d
-        //             '
-        //             """
-        //         }
-        //     }
-        // }
+    stage('Deploy Application on EC2') {
+        steps {
+        script {
+            sh """
+            ssh -i ${EC2_USER}@${EC2_HOST} << EOF
+            cd ~/TMS
+            docker-compose down
+            docker-compose up -d
+            exit
+            EOF
+            """
+        }
     }
 }
+    }
+}
+
+
+
+// pipeline {
+//   agent any
+//   triggers{
+//     githubPush()
+//   }
+//   stages {
+//     stage('Stage 1'){
+//       steps {
+//         echo 'This is Stage 1'
+//       }
+//     }
+//     stage('Stage 2'){
+//       steps{
+//         echo 'This is Stage 2'
+//       }
+//     }
+//     stage('Final'){
+//       steps{
+//         echo 'this is Final Stage'
+//       }
+//     }
+//     stage('Deploy') {
+//             steps {
+//                 echo 'Deploying application...'
+//             }
+//         }
+//     }
+// }
