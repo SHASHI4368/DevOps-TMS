@@ -26,13 +26,12 @@ pipeline {
                         fi
                         cd ~/${APP_NAME}
                         git pull origin ${BRANCH}
-                        git merge origin/${BRANCH}
                         if ! command -v docker-compose &> /dev/null; then
                           sudo curl -SL https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
                           sudo chmod +x /usr/local/bin/docker-compose
                         fi
                         sudo docker-compose down
-                        sudo docker-compose up -d
+                        sudo docker-compose up -d --build
                         exit
                         EOF
                         """
