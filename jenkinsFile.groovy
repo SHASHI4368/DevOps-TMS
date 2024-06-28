@@ -47,7 +47,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Install Docker Compose') {
             steps {
                 script {
@@ -65,7 +65,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Stop Existing Containers') {
             steps {
                 script {
@@ -81,7 +81,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Build and Start Containers') {
             steps {
                 script {
