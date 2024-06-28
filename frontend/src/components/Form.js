@@ -19,7 +19,7 @@ const Form = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.get("http://localhost:5000/users/");
+      const response = await axios.get("http://54.191.239.161:5000/users/");
       const userExists = response.data.some((user) => user.email === email);
 
       if (!userExists) {

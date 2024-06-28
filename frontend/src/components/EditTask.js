@@ -6,13 +6,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
 
-const EditTask = ({ isOpen, onClose, task}) => {
+const EditTask = ({ isOpen, onClose, task }) => {
   const [title, setTitle] = useState(task.title);
   const [dueDate, setDueDate] = useState(
     format(new Date(task.dueDate), "yyyy-MM-dd")
   );
   const [description, setDescription] = useState(task.description);
-
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -31,8 +30,8 @@ const EditTask = ({ isOpen, onClose, task}) => {
   };
 
   const updateTask = async (e) => {
-   console.log(task._id);
-   console.log(task.title);
+    console.log(task._id);
+    console.log(task.title);
 
     e.preventDefault();
     if (title === "" || description === "") {
@@ -43,9 +42,12 @@ const EditTask = ({ isOpen, onClose, task}) => {
         title: title,
         dueDate: dueDate,
         description: description,
-        completed:false
+        completed: false,
       };
-      await axios.put(`http://localhost:5000/api/tasks/${task._id}`, updated);
+      await axios.put(
+        `http://54.191.239.161:5000/api/tasks/${task._id}`,
+        updated
+      );
       notify("Task edited sucessfully");
       onClose();
     } catch (err) {
@@ -72,7 +74,12 @@ const EditTask = ({ isOpen, onClose, task}) => {
           </div>
           <div className="form-group">
             <label htmlFor="dueDate">Due Date:</label>
-            <input type="date" id="dueDate" value={dueDate} onChange={handleDateChange} />
+            <input
+              type="date"
+              id="dueDate"
+              value={dueDate}
+              onChange={handleDateChange}
+            />
           </div>
           <div className="form-group">
             <label htmlFor="taskDescription">Task Description:</label>

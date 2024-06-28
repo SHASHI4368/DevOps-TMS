@@ -22,11 +22,11 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:5000/users/");
+      const response = await axios.get("http://54.191.239.161:5000/users/");
       if (response.data.some((user) => user.email === email)) {
         notify("Email already in use");
       } else {
-        await axios.post("http://localhost:5000/api/signup/", {
+        await axios.post("http://54.191.239.161:5000/api/signup/", {
           email: email,
           password: password,
         });
@@ -42,13 +42,13 @@ const SignUp = () => {
     }
   };
 
-
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Sign Up</h2>
         <p>Enter your Email and Password </p>
-        <br /><br />
+        <br />
+        <br />
         <form>
           <input
             type="text"
@@ -60,7 +60,8 @@ const SignUp = () => {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <br /><br />
+          <br />
+          <br />
           <button onClick={submit}>Sign up</button>
         </form>
       </div>

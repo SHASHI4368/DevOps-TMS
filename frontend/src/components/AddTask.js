@@ -1,5 +1,5 @@
 // AddTask.js
-import React, { useState} from "react";
+import React, { useState } from "react";
 import "../AddTask.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -39,7 +39,7 @@ const AddTask = ({ isOpen, onClose, user }) => {
         dueDate: dueDate,
         description: description,
       };
-      await axios.post("http://localhost:5000/api/tasks", task);
+      await axios.post("http://54.191.239.161:5000/api/tasks", task);
       notify("Task added sucessfully");
       onClose();
     } catch (err) {

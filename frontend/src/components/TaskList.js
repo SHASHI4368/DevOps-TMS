@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import TaskForm from './TaskForm'
-import Task from './Task'
+import React, { useEffect, useState } from "react";
+import TaskForm from "./TaskForm";
+import Task from "./Task";
 import "../index.css";
 import { Link, useHistory } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import NavigationBar from "./NavigationBar";
-import axios from 'axios';
-import loadingImg from '../assets/loading.gif'
+import axios from "axios";
+import loadingImg from "../assets/loading.gif";
 import { useSelector } from "react-redux";
 import { selectUser } from "../slices/userSlice";
 
-
-
-const TaskList = ({user, setUser}) => {
-  const user2 = useSelector(selectUser)
+const TaskList = ({ user, setUser }) => {
+  const user2 = useSelector(selectUser);
   user = user2;
   // localStorage.setItem('user', JSON.stringify(user));
   const [tasks, setTasks] = useState([]);
@@ -25,13 +23,13 @@ const TaskList = ({user, setUser}) => {
   const [formData, setFormData] = useState({
     name: "",
     completed: false,
-    user: user._id
-  })
-  const {name} = formData;
+    user: user._id,
+  });
+  const { name } = formData;
   const history = useHistory();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     console.log(storedUser);
     if (storedUser) {
       setUser(JSON.parse(storedUser));
@@ -45,19 +43,19 @@ const TaskList = ({user, setUser}) => {
   };
 
   const handleInputChange = (e) => {
-    const {name, value} = e.target;
-    setFormData({...formData, [name]: value})
-  }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const notify = (msg) => {
     toast(msg);
-  }
+  };
 
   const getTasks = async () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `http://localhost:5000/api/userTasks/${user._id}`
+        `http://54.191.239.161:5000/api/userTasks/${user._id}`
       );
       setTasks(data);
       setIsLoading(false);
@@ -67,84 +65,84 @@ const TaskList = ({user, setUser}) => {
     }
   };
 
-
   useEffect(() => {
     getTasks();
-  }, [])
+  }, []);
 
-
-  
   const createTask = async (e) => {
     console.log(user._id);
     e.preventDefault();
-    if(name === ''){
+    if (name === "") {
       notify("Input fiels cannot be empty");
     }
-    try{
-      await axios.post("http://localhost:5000/api/tasks", formData);
-      notify('Task added sucessfully');
+    try {
+      await axios.post("http://54.191.239.161:5000/api/tasks", formData);
+      notify("Task added sucessfully");
       getTasks();
-      setFormData({...formData, name: ''});
-    }catch(err){
+      setFormData({ ...formData, name: "" });
+    } catch (err) {
       notify(err.message);
     }
-  }
+  };
 
   const deleteTask = async (id) => {
-    try{
-      await axios.delete(`http://localhost:5000/api/tasks/${id}`);
-      notify('Task deleted')
+    try {
+      await axios.delete(`http://54.191.239.161:5000/api/tasks/${id}`);
+      notify("Task deleted");
       getTasks();
-    }catch(err){
+    } catch (err) {
       notify(err.message);
     }
-  }
+  };
 
   useEffect(() => {
     const cTask = tasks.filter((task) => {
       return task.completed === true;
-    })
+    });
     setCompletedTasks(cTask);
-  },[tasks])
+  }, [tasks]);
 
   const getSingleTask = async (task) => {
     setFormData({
       name: task.name,
-      completed: false
-    })
+      completed: false,
+    });
     setTaskID(task._id);
     setIsEditing(true);
-  }
+  };
 
   const updateTask = async (e) => {
     e.preventDefault();
-    if(name === "") notify("Input field cannot be empty")
-    try{
-      await axios.put(`http://localhost:5000/api/tasks/${taskId}`, formData);
-      setFormData({...formData, name: ''});
+    if (name === "") notify("Input field cannot be empty");
+    try {
+      await axios.put(
+        `http://54.191.239.161:5000/api/tasks/${taskId}`,
+        formData
+      );
+      setFormData({ ...formData, name: "" });
       setIsEditing(false);
       getTasks();
-    }catch(err){
+    } catch (err) {
       notify(err.message);
     }
-  }
+  };
 
   const setToComplete = async (task) => {
-    
     const newFormData = {
       name: task.name,
-      completed: !task.completed
-    }
-    try{
-      await axios.put(`http://localhost:5000/api/tasks/${task._id}`, newFormData);
-      !task.completed ? notify('Task completed') : notify('Task redo');
+      completed: !task.completed,
+    };
+    try {
+      await axios.put(
+        `http://54.191.239.161:5000/api/tasks/${task._id}`,
+        newFormData
+      );
+      !task.completed ? notify("Task completed") : notify("Task redo");
       getTasks();
-    }catch(err){
+    } catch (err) {
       notify(err.message);
     }
-  }
-
-  
+  };
 
   return (
     <div>
@@ -189,6 +187,6 @@ const TaskList = ({user, setUser}) => {
       <ToastContainer position="top-center" />
     </div>
   );
-}
+};
 
-export default TaskList
+export default TaskList;

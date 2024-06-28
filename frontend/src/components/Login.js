@@ -21,7 +21,7 @@ const Login = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await axios.get("http://localhost:5000/users/");
+      const response = await axios.get("http://54.191.239.161:5000/users/");
       const userExists = response.data.some((user) => user.email === email);
 
       if (!userExists) {
@@ -31,7 +31,7 @@ const Login = ({ setUser }) => {
 
         if (user.password === password) {
           setUser(user);
-          dispatch(login(user))
+          dispatch(login(user));
           history.push("/tasks");
         } else {
           notify("Please check the password");
@@ -45,7 +45,8 @@ const Login = ({ setUser }) => {
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        <br /><br />
+        <br />
+        <br />
         <form>
           <input
             type="text"
@@ -57,7 +58,9 @@ const Login = ({ setUser }) => {
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={submit} id="login-btn">Login</button>
+          <button onClick={submit} id="login-btn">
+            Login
+          </button>
           <br />
           <br />
           <br />
