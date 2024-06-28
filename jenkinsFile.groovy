@@ -24,7 +24,6 @@ pipeline {
                         if [ ! -d "~/${APP_NAME}" ]; then
                           git clone ${REPO_URL} ~/${APP_NAME}
                         fi
-                        exit
                         EOF
                         """
                     }
@@ -40,7 +39,6 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
                         cd ~/${APP_NAME}
                         git pull origin ${BRANCH}
-                        exit
                         EOF
                         """
                     }
@@ -58,7 +56,6 @@ pipeline {
                           sudo curl -SL https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
                           sudo chmod +x /usr/local/bin/docker-compose
                         fi
-                        exit
                         EOF
                         """
                     }
@@ -74,7 +71,6 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
                         cd ~/${APP_NAME}
                         sudo docker-compose down
-                        exit
                         EOF
                         """
                     }
@@ -90,7 +86,6 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
                         cd ~/${APP_NAME}
                         sudo docker-compose up -d --build
-                        exit
                         EOF
                         """
                     }
