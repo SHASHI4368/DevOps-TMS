@@ -20,21 +20,19 @@ pipeline {
                 script {
                     sshagent([SSH_CREDENTIALS_ID]) {
                         sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
-                        set -e
+                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
                         if [ ! -d "~/${APP_NAME}" ]; then
                           git clone ${REPO_URL} ~/${APP_NAME}
                         fi
                         cd ~/${APP_NAME}
-                        git fetch origin
-                        git reset --hard origin/${BRANCH}
+                        git pull origin ${BRANCH}
+                        git merge origin/${BRANCH}
                         if ! command -v docker-compose &> /dev/null; then
                           sudo curl -SL https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
                           sudo chmod +x /usr/local/bin/docker-compose
                         fi
                         sudo docker-compose down
-                        sudo docker-compose pull
-                        sudo docker-compose up --build -d
+                        sudo docker-compose up -d
                         exit
                         EOF
                         """
