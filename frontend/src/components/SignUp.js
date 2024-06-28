@@ -31,6 +31,7 @@ const SignUp = () => {
           password: password,
         });
         notify("User Added successfully");
+        console.log("User Added successfully");
         setEmail("");
         setPassword("");
         setTimeout(() => {
