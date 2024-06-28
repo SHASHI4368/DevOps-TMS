@@ -18,13 +18,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-                        if [ ! -d "${APP_NAME}" ]; then
-                            git clone -b ${BRANCH} ${REPO_URL} ${APP_NAME};
-                        else
-                            cd ${APP_NAME} && git pull origin ${BRANCH};
-                        fi
-                    '
+                    ssh ${DEPLOY_USER}@${DEPLOY_SERVER}
                     """
                 }
             }
