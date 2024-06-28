@@ -1,74 +1,72 @@
 pipeline {
     agent any
-
-    triggers {
-        githubPush()
-    }
-
+triggers{
+    githubPush()
+  }
     environment {
-        REPO_URL = 'https://github.com/SHASHI4368/DevOps-TMS.git'
-        BRANCH = 'master'
-        APP_NAME = 'DevOps-TMS'
-        DEPLOY_SERVER = '16.171.194.50'
-        DEPLOY_USER = 'ubuntu'
+        REPO_URL = 'https://github.com/SHASHI4368/DevOps-TMS'
+        BRANCH = 'master' 
+        APP_NAME = 'TMS'
+        EC2_USER = 'ubuntu'
+        EC2_HOST = '16.171.194.50'
+
     }
 
     stages {
-        stage('SSH into Server and Clone Repo') {
+
+        stage('Access the Deploy Server') {
             steps {
                 script {
                     sh """
-                    ssh ${DEPLOY_USER}@${DEPLOY_SERVER}
+                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+                    cd ~/${APP_NAME} || git clone ${REPO_URL} ${APP_NAME}
+                    cd ${APP_NAME}
+                    git pull origin ${BRANCH}
+                    EOF
                     """
                 }
             }
         }
+        stage('Clone Repository') {
+            steps {
+                git branch: "${BRANCH}", url: "${REPO_URL}"
+            }
+        }
+        stage('Install Dependencies'){
+            steps{
+                echo 'Installing Dependencies...'
 
-        // stage('Install Dependencies') {
-        //     steps {
-        //         echo 'Installing Dependencies...'
-        //         // Add any additional steps if required
-        //     }
-        // }
+            }
+        }
 
-        // stage('Build Docker Images') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-        //                 cd ${APP_NAME} &&
-        //                 docker-compose build
-        //             '
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    sh 'docker-compose build'
+                }
+            }
+        }
 
-        // stage('Push Docker Images') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-        //                 cd ${APP_NAME} &&
-        //                 docker-compose push
-        //             '
-        //             """
-        //         }
-        //     }
-        // }
+        stage('Push Docker Images') {
+            steps {
+                script {
+                    sh '''
+                    docker-compose push
+                    '''
+                }
+            }
+        }
 
-        // stage('Deploy Application') {
-        //     steps {
-        //         script {
-        //             sh """
-        //             ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_SERVER} '
-        //                 cd ${APP_NAME} &&
-        //                 docker-compose down &&
-        //                 docker-compose up -d
-        //             '
-        //             """
-        //         }
-        //     }
-        // }
+    stage('Deploy Application on EC2') {
+        steps {
+        script {
+            sh """
+            docker-compose down
+            docker-compose up -d
+            exit
+            """
+        }
+    }
+}
     }
 }
