@@ -18,7 +18,7 @@ triggers{
             steps {
                 script {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+                    ssh ${EC2_USER}@${EC2_HOST} << EOF
                     cd ~/${APP_NAME} || git clone ${REPO_URL} ${APP_NAME}
                     cd ${APP_NAME}
                     git pull origin ${BRANCH}
