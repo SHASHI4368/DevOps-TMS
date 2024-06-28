@@ -20,29 +20,31 @@ pipeline {
                 script {
                     sshagent([SSH_CREDENTIALS_ID]) {
                         sh """
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
-                        if [ ! -d "~/${APP_NAME}" ]; then
-                          git clone ${REPO_URL} ~/${APP_NAME}
+                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'EOF'
+                        if [ ! -d "${APP_NAME}" ]; then
+                          git clone ${REPO_URL} ${APP_NAME}
                         fi
-                        cd ~/${APP_NAME}
+                        cd ${APP_NAME}
                         git pull origin ${BRANCH}
                         if ! command -v docker &> /dev/null; then
                           echo "Docker not found. Installing Docker..."
                           sudo apt-get update
-                          sudo apt-get install ca-certificates curl
-                          sudo install -m 0755 -d /etc/apt/keyrings
-                          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-                          sudo chmod a+r /etc/apt/keyrings/docker.asc
+                          sudo apt-get install -y \
+                              apt-transport-https \
+                              ca-certificates \
+                              curl \
+                              gnupg \
+                              lsb-release
+                          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
                           echo \
-                            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-                            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-                            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+                              "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+                              $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
                           sudo apt-get update
-
-                          sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+                          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
                         fi
                         if ! command -v docker-compose &> /dev/null; then
-                          sudo curl -SL https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+                          echo "Docker Compose not found. Installing Docker Compose..."
+                          sudo curl -sSL https://github.com/docker/compose/releases/download/v2.28.1/docker-compose-Linux-x86_64 -o /usr/local/bin/docker-compose
                           sudo chmod +x /usr/local/bin/docker-compose
                         fi
                         sudo docker-compose down
