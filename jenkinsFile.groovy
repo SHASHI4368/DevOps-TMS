@@ -14,6 +14,18 @@ triggers{
     }
 
     stages {
+
+        stage('Access the Deploy Server') {
+        steps {
+        script {
+            sh """
+            ssh -i ${EC2_USER}@${EC2_HOST} << EOF
+            cd ~/TMS 
+            EOF
+            """
+        }
+    }
+}
         stage('Clone Repository') {
             steps {
                 git branch: "${BRANCH}", url: "${REPO_URL}"
@@ -48,12 +60,9 @@ triggers{
         steps {
         script {
             sh """
-            ssh -i ${EC2_USER}@${EC2_HOST} << EOF
-            cd ~/TMS
             docker-compose down
             docker-compose up -d
             exit
-            EOF
             """
         }
     }
@@ -62,32 +71,3 @@ triggers{
 }
 
 
-
-// pipeline {
-//   agent any
-//   triggers{
-//     githubPush()
-//   }
-//   stages {
-//     stage('Stage 1'){
-//       steps {
-//         echo 'This is Stage 1'
-//       }
-//     }
-//     stage('Stage 2'){
-//       steps{
-//         echo 'This is Stage 2'
-//       }
-//     }
-//     stage('Final'){
-//       steps{
-//         echo 'this is Final Stage'
-//       }
-//     }
-//     stage('Deploy') {
-//             steps {
-//                 echo 'Deploying application...'
-//             }
-//         }
-//     }
-// }
