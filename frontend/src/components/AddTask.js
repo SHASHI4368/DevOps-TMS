@@ -44,6 +44,7 @@ const AddTask = ({ isOpen, onClose, user }) => {
       onClose();
     } catch (err) {
       notify(err.message);
+      console.log("Message");
     }
   };
   return isOpen ? (
