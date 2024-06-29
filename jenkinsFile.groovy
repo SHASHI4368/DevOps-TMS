@@ -11,7 +11,7 @@ pipeline {
         APP_NAME = 'TMS'
         EC2_USER = 'ubuntu'
         EC2_HOST = '54.191.239.161'
-        SSH_CREDENTIALS_ID = '54.191.239.161'  // Replace with your actual credentials ID
+        SSH_CREDENTIALS_ID = '54.191.239.161' 
     }
 
     stages {
