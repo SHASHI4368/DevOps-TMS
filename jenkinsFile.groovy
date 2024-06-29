@@ -32,7 +32,7 @@ pipeline {
                         fi
                         sudo docker-compose down
                         sudo docker-compose up -d --build
-			docker image prune -f
+			                     docker image prune -f
                         exit
                         EOF
                         """
